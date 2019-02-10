@@ -62,3 +62,4 @@ test2 = do
       forever $ do
         receive <- atomically $ readTChan chan
         print $ "Receive [" ++ (show threadId) ++ "]: " ++ receive
+        threadDelay 500000

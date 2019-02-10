@@ -37,7 +37,7 @@ sum' (v:l) = v + sum' l
 
 sumCSP :: [Int] -> (Int -> r) -> r
 sumCSP (n:[]) f = f n
-sumCSP (n:l) f = sumCSP l $ \i -> f (n + i)
+sumCSP (n:l) f = sumCSP l $ f . (n+)
 
 f :: (Int -> Int) -> Int -> Int
 f f' = f'

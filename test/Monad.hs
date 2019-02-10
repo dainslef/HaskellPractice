@@ -27,11 +27,17 @@ instance Applicative App where
 
 main :: IO ()
 main = print app1 >> print app2 >> print mon1 where
+
+  -- 原始 Applicative 类型运算逻辑
   app1 = (App . (++) . (.show)) <$> App "abc" <*> App 1
-  app2 = do -- ApplicativeDo 特性
+
+  -- ApplicativeDo 特性
+  app2 = do
     a <- App "abc"
     b <- App 2
     pure $ a ++ (show b)
+
+  -- Monad
   mon1 = do
     a <- Mon "abc"
     b <- Mon 3
