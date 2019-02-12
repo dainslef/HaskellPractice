@@ -27,77 +27,67 @@ library:
 tests:
   cps:
     source-dirs: test
-    main: TestCSP.hs
+    main: CSP.hs
     dependencies: [base]
     ghc-options: [-threaded, -rtsopts, -with-rtsopts=-N]
     other-modules: []
   type-class:
     source-dirs: test
-    main: TestTypeClass.hs
+    main: TypeClass.hs
     other-modules: []
     dependencies: [base]
   gadt:
     source-dirs: test
-    main: TestGADT.hs
+    main: GADT.hs
     dependencies: [base]
     other-modules: []
   pointfree:
     source-dirs: test
-    main: TestPointfree.hs
+    main: Pointfree.hs
     dependencies: [base]
     other-modules: []
   rankn:
     source-dirs: test
-    main: TestGADT.hs
+    main: GADT.hs
     dependencies: [base]
     other-modules: []
   http:
     source-dirs: test
-    main: TestHTTP.hs
+    main: HTTP.hs
     dependencies: [base, http-conduit, http-client]
     other-modules: []
   monad:
     source-dirs: test
-    main: TestMonad.hs
+    main: Monad.hs
     dependencies: [base]
     other-modules: []
   async:
     source-dirs: test
-    main: TestAsync.hs
+    main: Async.hs
     other-modules: []
     dependencies: [base, async]
   record:
     source-dirs: test
-    main: TestDuplicateRecordFields.hs
+    main: DuplicateRecordFields.hs
     other-modules: []
     dependencies: [base]
   stm:
     source-dirs: test
-    main: TestSTM.hs
-    other-modules: []
-    dependencies: [base, stm, async]
-  tvar:
-    source-dirs: test
-    main: TestTVar.hs
+    main: STM.hs
     other-modules: []
     dependencies: [base, stm, async]
   tchan:
     source-dirs: test
-    main: TestTChan.hs
+    main: TChan.hs
     other-modules: []
     dependencies: [base, stm, async]
-  y:
-    source-dirs: test
-    main: Y.hs
-    other-modules: []
-    dependencies: [base]
   exception:
     source-dirs: test
-    main: TestException.hs
+    main: Exception.hs
     other-modules: []
     dependencies: [base]
   lazy:
     source-dirs: test
-    main: TestLazy.hs
+    main: Lazy.hs
     other-modules: []
     dependencies: [base]

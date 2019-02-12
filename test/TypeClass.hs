@@ -45,13 +45,14 @@ test2 = do
 class MultiParamTypeClasses a b | a -> b where
   m :: a -> a -> b
 
-instance MultiParamTypeClasses String String where m = (++)
+-- 使用 FunctionalDependencies 需要保证在依赖路径下只有一个 instance 实现，以次避免显式指定类型
+-- instance MultiParamTypeClasses String String where m = (++)
 instance MultiParamTypeClasses String Int where m = (flip $ (+) . read) . read
 
 test3 :: IO ()
 test3 = do
-  print $ (m "123" "456" :: String)
-  print $ (m "777" "666" :: Int)
+  -- print (m "123" "456")
+  print $ m "777" "666"
 
 
 
@@ -59,9 +60,7 @@ class FunctionalDependencies argA argB argC | argB -> argC where
   f :: argA -> argB -> argC
 
 instance FunctionalDependencies String String String where f = (++)
-
-instance FunctionalDependencies Int String String where
-  f = (flip $ (++) . show) . show
+instance FunctionalDependencies Int String String where f = (flip $ (++) . show) . show
 
 test4 :: IO ()
 test4 = do
