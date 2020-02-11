@@ -1,13 +1,16 @@
 {-# LANGUAGE LambdaCase #-}
 
+module Lang.Exception where
+
 import Control.Exception
+import Control.Monad (void)
 
 data MyException = MyException String deriving Show
 instance Exception MyException
 
-test1, test2 :: IO ()
+testException1, testException2, testException3 :: IO ()
 
-test1 = (try $ do
+testException1 = (try $ do
   let n1 = 1
   let n2 = error "Try Exception!"
   print "Run..."
@@ -15,7 +18,7 @@ test1 = (try $ do
     Left (SomeException e) -> print $ "Exception info: " ++ (displayException e)
     Right a -> print $ "Success: " ++ (show a)
 
-test2 = do
+testException2 = do
 
   re1 <- catch (doSomething e1) dealException
   print $ "Result1: " ++ (show re1)
@@ -48,11 +51,11 @@ test2 = do
     showException :: Exception e => e -> IO Int
     showException = (>>(return 0)) . putStrLn . ("Catch the exception: "++) . displayException
 
-test3 = do
+testException3 = do
 
   _ <- onException (doSomething 1) after
   -- _ <- onException (error "onException") after
-  bracket_ before after (doSomething $ error "bracket_")
+  bracket_ before after (void $ doSomething $ error "bracket_")
 
   where
 
@@ -66,5 +69,3 @@ test3 = do
     before, after :: IO ()
     before = print "Before action..."
     after = print "After action..."
-
-main = test3

@@ -1,5 +1,7 @@
 {-# LANGUAGE KindSignatures #-}
 
+module Lang.Maybe where
+
 import Data.Maybe
 
 num1, num2, num3 :: Maybe Int
@@ -7,8 +9,8 @@ num1 = Just 2333
 num2 = Nothing
 num3 = Just 666
 
-main :: IO ()
-main = do
+testMaybe :: IO ()
+testMaybe = do
 
   print $ "Num0: " ++ (show $ fromMaybe 0 re0)
   print $ "Num1: " ++ (show $ fromMaybe 0 re1)

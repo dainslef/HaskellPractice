@@ -1,13 +1,12 @@
+module Lang.TChan where
+
 import Control.Monad
 import Control.Monad.STM
 import Control.Concurrent
 import Control.Concurrent.Async
 import Control.Concurrent.STM.TChan
 
-main = test2
-
-test1 :: IO ()
-test1 = do
+testTChan1 = do
 
   c <- chan
   a <- sendMessage c
@@ -35,8 +34,7 @@ test1 = do
         receive <- atomically $ readTChan rChan
         print $ "Receive [" ++ (show threadId) ++ "]: " ++ receive
 
-test2 :: IO ()
-test2 = do
+testTChan2 = do
 
   c <- chan
   a <- sendMessage c

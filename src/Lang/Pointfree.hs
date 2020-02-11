@@ -1,4 +1,4 @@
-{-# LANGUAGE BangPatterns #-}
+module Lang.Pointfree where
 
 import Data.Foldable (foldl')
 
@@ -26,6 +26,3 @@ squish :: (b1 -> a1)
   -> a3
   -> c
 squish f a b c g = (f >>= a) . b . (c =<< g)
-
-main :: IO ()
-main = print "Pointfree"

@@ -1,3 +1,5 @@
+module Lang.CSP where
+
 fab :: Int -> Int
 fab n | n == 0 || n == 1 = n
 fab n = (fab $ n - 1) + (fab $ n - 2)
@@ -42,5 +44,5 @@ sumCSP (n:l) f = sumCSP l $ f . (n+)
 f :: (Int -> Int) -> Int -> Int
 f f' = f'
 
-main :: IO ()
-main = sumCSP [1 .. 100] print
+testCSP :: IO ()
+testCSP = sumCSP [1 .. 100] print

@@ -1,5 +1,7 @@
 {-# LANGUAGE ApplicativeDo #-}
 
+module Lang.Monad where
+
 data Mon a = Mon {
   mon :: a
 } deriving (Eq, Show)
@@ -25,20 +27,20 @@ instance Applicative App where
   pure = App
   (<*>) = flip (flip (App.) . app) . app
 
-main :: IO ()
-main = print app1 >> print app2 >> print mon1 where
+testMonad :: IO ()
+testMonad = print app1 >> print app2 >> print mon1 where
 
-  -- 原始 Applicative 类型运算逻辑
-  app1 = (App . (++) . (.show)) <$> App "abc" <*> App 1
+  -- Normal use for Applicative
+  app1 = (App $ flip (++) . show) <*> App 1 <*> App "abc"
 
-  -- ApplicativeDo 特性
+  -- ApplicativeDo feautre
   app2 = do
     a <- App "abc"
     b <- App 2
-    pure $ a ++ (show b)
+    pure $ a ++ show b
 
-  -- Monad
+  -- MonadDo
   mon1 = do
     a <- Mon "abc"
     b <- Mon 3
-    Mon $ a ++ (show b)
+    Mon $ a ++ show b

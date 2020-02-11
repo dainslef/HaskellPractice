@@ -1,5 +1,7 @@
 {-# LANGUAGE GADTs #-}
 
+module Lang.GADT where
+
 data Expr a =
   NumExpr a |
   BoolExpr a |
@@ -28,8 +30,8 @@ getGadtExpr (GadtEq expr1 expr2) = (getGadtExpr expr1) == (getGadtExpr expr2)
 p :: Show a => GadtExpr a -> IO ()
 p s = print $ getGadtExpr s
 
-main :: IO ()
-main = do
+testGADT :: IO ()
+testGADT = do
   let (num1, num2) = (NumGadtExpr 10, NumGadtExpr 20)
   let (bool1, bool2) = (BoolGadtExpr True, BoolGadtExpr False)
   print $ GadtEq bool1 bool2

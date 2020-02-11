@@ -1,3 +1,5 @@
+module Lang.Async where
+
 import Control.Concurrent
 import Control.Concurrent.Async
 import Control.Monad (mapM)
@@ -19,25 +21,19 @@ actionsL = foldr (\a b ->
   b >>= return . (c:)) $ return []
 actionsM = mapM async
 
-main1, main2 :: IO ()
-
-main1 = do
+testAsync1 = do
   res <- withAsync (actionN 1) $ \async1 -> do
     print "With Async..."
-    res <- wait async1
-    return res
+    wait async1
   actions <- actionsM [actionN 2, actionN 3]
   (as, s) <- waitAny actions
   print $ "First finish actions: " ++ s
-  print $ "End: " ++ (show res)
+  print $ "End: " ++ res
 
-main2 = do
+testAsync2 = do
   a1 <- async $ actionN 1
   print "After action1"
   a2 <- async $ actionN 2
   print "After action2"
   (r1, r2) <- waitBoth a1 a2
   print $ "Finish: " ++ r1 ++ " " ++ r2
-
-main :: IO ()
-main = main2

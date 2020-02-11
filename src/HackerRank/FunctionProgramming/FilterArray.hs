@@ -1,3 +1,5 @@
+module HackerRank.FunctionProgramming.FilterArray where
+
 import Test.HUnit ((@=?))
 
 f :: Int -> [Int] -> [Int]
@@ -14,5 +16,5 @@ f1 = k [] where
     | v < n = k (o ++ [v]) n l
     | otherwise = k o n l
 
-main :: IO ()
-main = [1, 2] @=? f 3 [1, 2, 3, 4, 5, 6, 7, 8, 9]
+testFilterArray :: IO ()
+testFilterArray = [1, 2] @=? f 3 [1, 2, 3, 4, 5, 6, 7, 8, 9]

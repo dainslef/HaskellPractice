@@ -1,3 +1,5 @@
+module Lang.STM where
+
 import Data.IORef
 import Control.Monad
 import Control.Monad.STM
@@ -42,8 +44,7 @@ printAB :: String -> Int -> Int -> IO ()
 printAB prefix a b = print $ foldl1 (++)
   [prefix, " A: [", show a, "], B: [", show b, "]"]
 
-test1, test2 :: IO ()
-test1 = do
+testSTM1 = do
   a <- refA
   b <- refB
   changeIORef "1" a b
@@ -52,7 +53,8 @@ test1 = do
   changeIORef "4" a b
   threadDelay 1000000
   printIORef "last" a b
-test2 = do
+
+testSTM2 = do
   a <- varA
   b <- varB
   changeTVar "1" a b
@@ -61,5 +63,3 @@ test2 = do
   changeTVar "4" a b
   threadDelay 1000000
   printTVar "last" a b
-
-main = test1 >> test2

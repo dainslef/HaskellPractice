@@ -1,6 +1,8 @@
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-} -- 令 TypeClass 支持多个类型参数
+-- {-# LANGUAGE MultiParamTypeClasses #-} -- 令 TypeClass 支持多个类型参数
 {-# LANGUAGE FunctionalDependencies #-} -- 令 TypeClass 支持类型参数依赖
+
+module Lang.TypeClass where
 
 import Text.Read (read)
 
@@ -18,8 +20,7 @@ instance TypeDependency TypeA TypeB String where
 instance TypeDependency TypeA TypeA String where
   get (TypeA a1) (TypeA a2) = "A1:" ++ (show a1) ++ ", A2:" ++ (show a2)
 
-test1 :: IO ()
-test1 = do
+testTypeClass1 = do
   print (get (TypeA 666) (TypeB "2333") :: String)
   print (get (TypeA 666) (TypeA 777) :: String)
 
@@ -35,8 +36,7 @@ instance TypeClass TypeA TypeB where
 instance TypeClass TypeA TypeA where
   doSomething (TypeA t) _ = print $ "Type Class AA: " ++ (show t)
 
-test2 :: IO ()
-test2 = do
+testTypeClass2 = do
   doSomething (TypeA 2333) (TypeB "2333")
   doSomething (TypeA 666) (TypeA 23333)
 
@@ -49,8 +49,7 @@ class MultiParamTypeClasses a b | a -> b where
 -- instance MultiParamTypeClasses String String where m = (++)
 instance MultiParamTypeClasses String Int where m = (flip $ (+) . read) . read
 
-test3 :: IO ()
-test3 = do
+testTypeClass3 = do
   -- print (m "123" "456")
   print $ m "777" "666"
 
@@ -62,12 +61,6 @@ class FunctionalDependencies argA argB argC | argB -> argC where
 instance FunctionalDependencies String String String where f = (++)
 instance FunctionalDependencies Int String String where f = (flip $ (++) . show) . show
 
-test4 :: IO ()
-test4 = do
+testTypeClass4 = do
   print $ f "123" "456"
   print $ f (123 :: Int) "456"
-
-
-
-main :: IO ()
-main = test3

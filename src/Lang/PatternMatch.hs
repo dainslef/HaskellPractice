@@ -1,3 +1,5 @@
+module Lang.PatternMatch where
+
 data Number = Number {
   value :: Int
 } deriving (Eq, Show)
@@ -13,7 +15,6 @@ add :: Int -> Int -> Int
 add n | n > 100 = (+n)
 -- add n1 n2 = n1 + n2 -- 模式匹配中的每一个表达式需要有相同的参数数目
 
-main :: IO ()
-main = do
+testPatternMatch = do
   printNumber $ Number 2333
   printNumber $ Number 1

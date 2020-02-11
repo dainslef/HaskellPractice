@@ -18,97 +18,18 @@ build-type: Simple
 #       - -threaded
 #       - -rtsopts
 #       - -with-rtsopts=-N
-
 # library:
 #   source-dirs: src
 #   exposed-modules: Lib
 #   dependencies: [base]
 
-tests:
-  map:
+library:
+  source-dirs: src
+  dependencies: [base, stm, async, http-conduit, http-client, HUnit]
+
+executables:
+  main-test:
     source-dirs: test
-    main: Map.hs
+    main: Test.hs
+    dependencies: [base, hspec, stm, async, http-conduit, http-client, haskell-practice]
     other-modules: []
-    dependencies: [base]
-  cps:
-    source-dirs: test
-    main: CSP.hs
-    dependencies: [base]
-    ghc-options: [-threaded, -rtsopts, -with-rtsopts=-N]
-    other-modules: []
-  type-class:
-    source-dirs: test
-    main: TypeClass.hs
-    other-modules: []
-    dependencies: [base]
-  gadt:
-    source-dirs: test
-    main: GADT.hs
-    dependencies: [base]
-    other-modules: []
-  pointfree:
-    source-dirs: test
-    main: Pointfree.hs
-    dependencies: [base]
-    other-modules: []
-  rankn:
-    source-dirs: test
-    main: GADT.hs
-    dependencies: [base]
-    other-modules: []
-  http:
-    source-dirs: test
-    main: HTTP.hs
-    dependencies: [base, http-conduit, http-client]
-    other-modules: []
-  monad:
-    source-dirs: test
-    main: Monad.hs
-    dependencies: [base]
-    other-modules: []
-  async:
-    source-dirs: test
-    main: Async.hs
-    other-modules: []
-    dependencies: [base, async]
-  record:
-    source-dirs: test
-    main: DuplicateRecordFields.hs
-    other-modules: []
-    dependencies: [base]
-  stm:
-    source-dirs: test
-    main: STM.hs
-    other-modules: []
-    dependencies: [base, stm, async]
-  tchan:
-    source-dirs: test
-    main: TChan.hs
-    other-modules: []
-    dependencies: [base, stm, async]
-  exception:
-    source-dirs: test
-    main: Exception.hs
-    other-modules: []
-    dependencies: [base]
-  lazy:
-    source-dirs: test
-    main: Lazy.hs
-    other-modules: []
-    dependencies: [base]
-  # hacker rank practice
-  fp-filter-array:
-    source-dirs: hacker-rank/function-programming
-    main: FilterArray.hs
-    other-modules: []
-    dependencies: [base, HUnit]
-  fp-filter-positions-in-a-list:
-    source-dirs: hacker-rank/function-programming
-    main: FilterPositionsInAList.hs
-    other-modules: []
-    dependencies: [base, HUnit]
-  fp-reverse-a-list:
-    source-dirs: hacker-rank/function-programming
-    main: ReverseAList.hs
-    other-modules: []
-    dependencies: [base, HUnit]

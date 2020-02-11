@@ -1,8 +1,9 @@
 {-# LANGUAGE GADTs, TypeFamilies #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
 {-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FunctionalDependencies #-} -- MultiParamTypeClasses implied by this
+
+module Lang.TypeFamily where
 
 import Text.Read (read)
 
@@ -27,7 +28,7 @@ testString = print
 testInt :: OpenFamily Int -> IO ()
 testInt = print . show
 
-test1 = do
+testTypeFamily1 = do
   testString "2333"
   testInt 2333
 
@@ -60,7 +61,7 @@ instance TypeFamily String where
   type Family String = [String]
   f = head
 
-test2 = do
+testTypeFamily2 = do
   testFamilyInt $ FInt 2333
   testFamilyMaybe $ FJust 6666
   testFamilyMaybe (FNothing :: DataFamily (Maybe String))
@@ -72,19 +73,17 @@ class TypeClass a b | a -> b where
 instance TypeClass String Int where
   t = read
 
-test3 = do
-  print $ show $ (f ["abc"] :: String)
+testTypeFamily3 = do
+  print $ show (f ["abc"] :: String)
   print . show . t $ "2333"
 
 
 
 data family KindA a
-data family Kind1 :: * -> * -> *
+data family Kind1 :: * -> * -> * -- Kind, need two type parameter
 data family DataKindA1 a
 
-data instance Kind1 Int = DataKind1
+data instance Kind1 Int String  = DataKind1
 data instance DataKindA1 String = DataKindA1 String deriving Show
 
-test4 = print $ DataKindA1 "2333"
-
-main = test3
+testTypeFamily4 = print $ DataKindA1 "2333"
