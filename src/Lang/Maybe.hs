@@ -12,8 +12,8 @@ num3 = Just 666
 testMaybe :: IO ()
 testMaybe = do
 
-  print $ "Num0: " ++ (show $ fromMaybe 0 re0)
-  print $ "Num1: " ++ (show $ fromMaybe 0 re1)
+  print $ "Num0: " ++ show (fromMaybe 0 re0)
+  print $ "Num1: " ++ show (fromMaybe 0 re1)
   print $ testMaybe "TestString" 2.0
 
   where
@@ -33,4 +33,4 @@ testMaybe = do
     testMaybe :: (Foldable a, Num b) => a c -> b -> Maybe b
     testMaybe a b = do
       s <- Just a
-      Just $ (fromIntegral $ length s) + b
+      Just $ fromIntegral (length s) + b

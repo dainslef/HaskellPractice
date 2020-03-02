@@ -21,7 +21,7 @@ data Test = Test !Int
 
 testLazy3 = do
   case (1, undefined) of
-    !(a, b) -> print "Strict Out"
+    !(a, b) -> print "Strict Out" -- Redundant bang pattern
   case (1, undefined) of
     (a, !b) -> print "Strict Inner"
 

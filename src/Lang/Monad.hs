@@ -2,7 +2,7 @@
 
 module Lang.Monad where
 
-data Mon a = Mon {
+newtype Mon a = Mon {
   mon :: a
 } deriving (Eq, Show)
 
@@ -16,7 +16,7 @@ instance Applicative Mon where
 instance Monad Mon where
   ma >>= amb = amb $ mon ma
 
-data App a = App {
+newtype App a = App {
   app :: a
 } deriving (Eq, Show)
 

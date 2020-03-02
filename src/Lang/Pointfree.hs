@@ -13,10 +13,10 @@ mySum l = foldl (+) 0 l
 mySumP = foldl (+) 0 -- Pointfree Style
 
 owl :: (a -> b -> c) -> a -> (a1 -> b) -> a1 -> c
-owl = ((.) $ (.))
+owl = (.) (.)
 
 dot :: (b -> c) -> (a -> a1 -> b) -> a -> a1 -> c
-dot = ((.) . (.))
+dot = (.) . (.)
 
 squish :: (b1 -> a1)
   -> (a1 -> b1 -> c)

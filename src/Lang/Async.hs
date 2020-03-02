@@ -17,8 +17,7 @@ actions = foldr (\a b -> do
   c <- async a
   return $ c : l) $ return []
 actionsL = foldr (\a b ->
-  async a >>= \c ->
-  b >>= return . (c:)) $ return []
+  async a >>= \c -> (c:) <$> b) $ return []
 actionsM = mapM async
 
 testAsync1 = do

@@ -18,14 +18,14 @@ data GadtExpr a where
 instance Show a => Show (GadtExpr a) where
   show (NumGadtExpr a) = "Num " ++ show a
   show (BoolGadtExpr a) = "Bool " ++ show a
-  show (GadtAdd expr1 expr2) = show $ "GadtAdd " ++ (show expr1) ++ " " ++ (show expr2)
-  show (GadtEq expr1 expr2) = show $ "GadtEq " ++ (show expr1) ++ " " ++ (show expr2)
+  show (GadtAdd expr1 expr2) = show $ "GadtAdd " ++ show expr1 ++ " " ++ show expr2
+  show (GadtEq expr1 expr2) = show $ "GadtEq " ++ show expr1 ++ " " ++ show expr2
 
 getGadtExpr :: GadtExpr a -> a
 getGadtExpr (NumGadtExpr a) = a
 getGadtExpr (BoolGadtExpr a) = a
 getGadtExpr (GadtAdd (NumGadtExpr n1) (NumGadtExpr n2)) = n1 + n2
-getGadtExpr (GadtEq expr1 expr2) = (getGadtExpr expr1) == (getGadtExpr expr2)
+getGadtExpr (GadtEq expr1 expr2) = getGadtExpr expr1 == getGadtExpr expr2
 
 p :: Show a => GadtExpr a -> IO ()
 p s = print $ getGadtExpr s

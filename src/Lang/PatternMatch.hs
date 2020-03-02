@@ -1,6 +1,6 @@
 module Lang.PatternMatch where
 
-data Number = Number {
+newtype Number = Number {
   value :: Int
 } deriving (Eq, Show)
 

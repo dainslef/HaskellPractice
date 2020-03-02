@@ -43,7 +43,7 @@ testFamilyInt :: DataFamily Int -> IO ()
 testFamilyInt (FInt a) = print . show $ a
 
 testFamilyMaybe :: Show a => DataFamily (Maybe a) -> IO ()
-testFamilyMaybe f@(FJust a) = print $ "FJust: " ++ (show f)
+testFamilyMaybe f@(FJust a) = print $ "FJust: " ++ show f
 testFamilyMaybe FNothing = print "Nothing"
 
 data family Expr a
