@@ -1,10 +1,10 @@
-{-# LANGUAGE FlexibleInstances #-}
--- {-# LANGUAGE MultiParamTypeClasses #-} -- 令 TypeClass 支持多个类型参数
-{-# LANGUAGE FunctionalDependencies #-} -- 令 TypeClass 支持类型参数依赖
+{-# LANGUAGE FlexibleInstances #-} -- make type class allow the nested types that don't in turn contain type variables
+-- {-# LANGUAGE MultiParamTypeClasses #-} -- make type class allow multi type parameters, it has aready imported by extension `FunctionalDependencies`
+{-# LANGUAGE FunctionalDependencies #-} -- make type class support functional dependencies
 
 module Lang.TypeClass where
 
-import Text.Read (read)
+import           Text.Read                      ( read )
 
 newtype TypeA = TypeA Int
 newtype TypeB = TypeB String
@@ -21,6 +21,7 @@ instance TypeDependency TypeA TypeA String where
   get (TypeA a1) (TypeA a2) = "A1:" ++ show a1 ++ ", A2:" ++ show a2
 
 testTypeClass1 = do
+  -- without functional dependencies you have specify the return type of the expression
   print (get (TypeA 666) (TypeB "2333") :: String)
   print (get (TypeA 666) (TypeA 777) :: String)
 
@@ -32,34 +33,37 @@ class TypeClass a b where
 instance TypeClass TypeA TypeB where
   doSomething (TypeA t) _ = print $ "Type Class AB: " ++ show t
 
--- 使用语言扩展 FlexibleInstances 开启泛型参数特化
+-- use extension `FlexibleInstances` to allow nested types that don't in turn contain type variables
 instance TypeClass TypeA TypeA where
   doSomething (TypeA t) _ = print $ "Type Class AA: " ++ show t
 
 testTypeClass2 = do
   doSomething (TypeA 2333) (TypeB "2333")
-  doSomething (TypeA 666) (TypeA 23333)
+  doSomething (TypeA 666)  (TypeA 23333)
 
 
 
 class MultiParamTypeClasses a b | a -> b where
   m :: a -> a -> b
 
--- 使用 FunctionalDependencies 需要保证在依赖路径下只有一个 instance 实现，以次避免显式指定类型
+-- use extension `FunctionalDependencies`, the dependency path should be unique,
+-- one dependency can only be allowed to have on `instance`
+instance MultiParamTypeClasses String Int where
+  m = flip ((+) . read) . read
+-- error: ""
 -- instance MultiParamTypeClasses String String where m = (++)
-instance MultiParamTypeClasses String Int where m = flip ((+) . read) . read
 
-testTypeClass3 = do
-  -- print (m "123" "456")
-  print $ m "777" "666"
+testTypeClass3 = print $ m "123" "456"
 
 
 
 class FunctionalDependencies argA argB argC | argB -> argC where
   f :: argA -> argB -> argC
 
-instance FunctionalDependencies String String String where f = (++)
-instance FunctionalDependencies Int String String where f = (++) . show
+instance FunctionalDependencies String String String where
+  f = (++)
+instance FunctionalDependencies Int String String where
+  f = (++) . show
 
 testTypeClass4 = do
   print $ f "123" "456"

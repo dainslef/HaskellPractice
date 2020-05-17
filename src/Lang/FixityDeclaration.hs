@@ -3,11 +3,11 @@ module Lang.FixityDeclaration where
 testFixityDeclaration :: IO ()
 testFixityDeclaration = do
   print "Custom operate (...):"
-  return 1 ... return 2 ... return 3 -- 操作符左結合
+  return 1 ... return 2 ... return 3 -- left-associative
   print "Custom operate (|||):"
-  return 1 ||| return 2 ||| return 3 -- 操作符右結合
+  return 1 ||| return 2 ||| return 3 -- right-associative
   print "Custom operate (@@@):"
-  (return 1 @@@ return 2) @@@ return 3 -- 操作符不可結合
+  (return 1 @@@ return 2) @@@ return 3 -- non-associative
   return ()
 
 (...), (|||) :: IO Int -> IO Int -> IO Int
@@ -19,7 +19,7 @@ n1 ... n2 = do
 (|||) = (...)
 (@@@) = (...)
 
--- 定義操作符結合性和優先級
+-- fixity declarations
 infixl 5 ...
 infixr 6 |||
 infix 7 @@@

@@ -11,7 +11,6 @@ fac n = n * fac (n - 1)
 printAll :: IO ()
 printAll = foldMap print [fab 10, fac 10, facCSP 10 id]
 
--- 需要通项公式才能计算CSP形式的斐波那契数列
 -- fabCSP :: Int -> (Int -> r) -> r
 -- fabCSP i k | i == 0 || i == 1 = k i
 -- fabCSP i k = fabCSP (i - 1) $ \r -> k ()
@@ -20,7 +19,7 @@ facCSP :: Int -> (Int -> r) -> r
 facCSP 1 k = k 1
 facCSP i k = facCSP (i - 1) $ \r -> k (r * i)
 
-{-- 计算逻辑
+{-- computation steps
 facCSP 10 k = facCSP 9 $ \r -> k (r * 10) -- facCSP 9 $ \r -> id (r * 10)
 facCSP 9 k = facCSP 8 $ \r -> k (r * 9) -- facCSP 8 $ \r -> id ((r * 9) * 10)
 ...

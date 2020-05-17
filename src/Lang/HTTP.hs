@@ -1,6 +1,6 @@
 module Lang.HTTP where
 
-import Network.HTTP.Client
+import           Network.HTTP.Client
 
 testHttp :: IO ()
 testHttp = do

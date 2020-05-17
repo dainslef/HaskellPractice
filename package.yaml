@@ -27,7 +27,7 @@ library:
   source-dirs: src
   dependencies: [base, stm, async, http-conduit, http-client, HUnit]
 
-executables:
+tests:
   main-test:
     source-dirs: test
     main: Test.hs

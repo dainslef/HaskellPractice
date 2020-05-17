@@ -6,7 +6,7 @@ import Control.Monad (mapM)
 
 actionN :: Int -> IO String
 actionN num = do
-  threadDelay 1000000 -- 暂停线程 1s，便于观察异步操作执行情况
+  threadDelay 1000000 -- stop the thread 1 for watching the thread behavior
   let n = show num
   print $ "Running action" ++ n ++ "..."
   return $ "Action " ++ n

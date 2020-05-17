@@ -29,7 +29,7 @@ testMaybe = do
       return $ n1 + n3
 
     -- Maybe Monad
-    -- 数值转换使用 fromIntegral 函数
+    -- use function "fromIntegral" to covert from number type
     testMaybe :: (Foldable a, Num b) => a c -> b -> Maybe b
     testMaybe a b = do
       s <- Just a

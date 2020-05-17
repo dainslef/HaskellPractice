@@ -1,11 +1,11 @@
 module Lang.STM where
 
-import Data.IORef
-import Control.Monad
-import Control.Monad.STM
-import Control.Concurrent.Async
-import Control.Concurrent.STM.TVar
-import Control.Concurrent (threadDelay)
+import           Data.IORef
+import           Control.Monad
+import           Control.Monad.STM
+import           Control.Concurrent.Async
+import           Control.Concurrent.STM.TVar
+import           Control.Concurrent             ( threadDelay )
 
 refA, refB :: IO (IORef Int)
 refA = newIORef 1000
@@ -18,14 +18,14 @@ varB = newTVarIO 0
 changeIORef :: String -> IORef Int -> IORef Int -> IO (Async ())
 changeIORef i refA refB = async $ replicateM_ 3 $ do
   modifyIORef' refA (flip (-) 20)
-  modifyIORef' refB (+20)
+  modifyIORef' refB (+ 20)
   printIORef i refA refB
 
 changeTVar :: String -> TVar Int -> TVar Int -> IO (Async ())
 changeTVar i varA varB = async $ replicateM_ 3 $ do
   atomically $ do
     modifyTVar' varA (flip (-) 20)
-    modifyTVar' varB (+20)
+    modifyTVar' varB (+ 20)
   printTVar i varA varB
 
 printIORef :: String -> IORef Int -> IORef Int -> IO ()
@@ -41,8 +41,8 @@ printTVar i varA varB = do
   printAB ("TVar " ++ i ++ ":") a b
 
 printAB :: String -> Int -> Int -> IO ()
-printAB prefix a b = print $ foldl1 (++)
-  [prefix, " A: [", show a, "], B: [", show b, "]"]
+printAB prefix a b =
+  print $ foldl1 (++) [prefix, " A: [", show a, "], B: [", show b, "]"]
 
 testSTM1 = do
   a <- refA

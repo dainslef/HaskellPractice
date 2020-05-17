@@ -5,7 +5,7 @@
 
 module Lang.TypeFamily where
 
-import Text.Read (read)
+import           Text.Read                      ( read )
 
 type family ClosedFamily a where
   ClosedFamily String = String
@@ -35,16 +35,19 @@ testTypeFamily1 = do
 
 
 data family DataFamily a
-newtype instance DataFamily Int = FInt Int  -- 构造器单参数时可使用 newtype 关键字
-data instance DataFamily String = FString (DataFamily Int) String -- 构造器中的参数可依赖具体的类型族中的其它实例
-data instance DataFamily (Maybe a) = FJust a | FNothing deriving (Show, Eq) -- 每格 instance 可以 deriving 各自的 TypeClass
+-- use `newtype` keyword to define a new type when the type has only one parameter
+newtype instance DataFamily Int = FInt Int
+-- the argument in constructor can use the other type from current type family
+data instance DataFamily String = FString (DataFamily Int) String
+-- each `instance` can `deriving` the different type classes
+data instance DataFamily (Maybe a) = FJust a | FNothing deriving (Show, Eq)
 
 testFamilyInt :: DataFamily Int -> IO ()
 testFamilyInt (FInt a) = print . show $ a
 
 testFamilyMaybe :: Show a => DataFamily (Maybe a) -> IO ()
 testFamilyMaybe f@(FJust a) = print $ "FJust: " ++ show f
-testFamilyMaybe FNothing = print "Nothing"
+testFamilyMaybe FNothing    = print "Nothing"
 
 data family Expr a
 data instance Expr a where
@@ -66,7 +69,10 @@ testTypeFamily2 = do
   testFamilyMaybe $ FJust 6666
   testFamilyMaybe (FNothing :: DataFamily (Maybe String))
 
--- 去掉依赖关系或修改依赖关系为 b -> a 均会导致方法调用时类型自动推导失败
+
+-- The feature "functional dependencies" can help compiler to infer the type info precisely,
+-- remove the functional dependencies or change the dependencies to "b -> a",
+-- will cause the type inference failed
 class TypeClass a b | a -> b where
   t :: a -> b
 

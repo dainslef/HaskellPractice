@@ -30,8 +30,8 @@ instance Applicative App where
 testMonad :: IO ()
 testMonad = print app1 >> print app2 >> print mon1 where
 
-  -- Normal use for Applicative
-  app1 = (App $ flip (++) . show) <*> App 1 <*> App "abc"
+  -- normal use for Applicative
+  app1 = App (flip (++) . show) <*> App 1 <*> App "abc"
 
   -- ApplicativeDo feautre
   app2 = do

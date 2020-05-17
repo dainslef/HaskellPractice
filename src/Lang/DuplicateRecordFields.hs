@@ -11,5 +11,6 @@ newtype Record2 = Record2 {
 } deriving (Show, Eq)
 
 testDuplicateRecordFields = do
-  print $ name (Record1 "23333" :: Record1) -- 必须显式指定参数类型，否则会得到異常： Ambiguous occurrence ‘name’
+  -- need to specify the type of the expression, or get error: "Ambiguous occurrence ‘name’"
+  print $ name (Record1 "23333" :: Record1)
   print $ name (Record2 "23333" :: Record2)
