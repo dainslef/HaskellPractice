@@ -53,7 +53,7 @@ instance MultiParamTypeClasses String Int where
 -- error: ""
 -- instance MultiParamTypeClasses String String where m = (++)
 
-testTypeClass3 = print $ m "123" "456"
+testFunctionalDependencies1 = print $ m "123" "456"
 
 
 
@@ -65,6 +65,6 @@ instance FunctionalDependencies String String String where
 instance FunctionalDependencies Int String String where
   f = (++) . show
 
-testTypeClass4 = do
+testFunctionalDependencies2 = do
   print $ f "123" "456"
   print $ f (123 :: Int) "456"

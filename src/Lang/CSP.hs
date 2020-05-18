@@ -2,7 +2,7 @@ module Lang.CSP where
 
 fab :: Int -> Int
 fab n | n == 0 || n == 1 = n
-fab n = fab (n - 1) + fab (n - 2)
+fab n                    = fab (n - 1) + fab (n - 2)
 
 fac :: Int -> Int
 fac 1 = 1
@@ -29,16 +29,16 @@ facCSP 1 k = k 1 -- id (((1 * 2) ... * 9) * 10)
 
 sum :: [Int] -> Int
 sum = k 0 where
-  k v [] = v
-  k v (n:l) = k (v + n) l
+  k v []      = v
+  k v (n : l) = k (v + n) l
 
 sum' :: [Int] -> Int
-sum' [v] = v
-sum' (v:l) = v + sum' l
+sum' [v    ] = v
+sum' (v : l) = v + sum' l
 
 sumCSP :: [Int] -> (Int -> r) -> r
-sumCSP [n] f = f n
-sumCSP (n:l) f = sumCSP l $ f . (n+)
+sumCSP [n    ] f = f n
+sumCSP (n : l) f = sumCSP l $ f . (n +)
 
 f :: (Int -> Int) -> Int -> Int
 f f' = f'

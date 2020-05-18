@@ -1,10 +1,12 @@
 module HackerRank.FunctionProgramming.ReverseAList where
 
-import Test.HUnit ((@=?))
+import           Test.Hspec
 
 rev :: [Int] -> [Int]
 rev = f [] where
-  f o [] = o
-  f o (v:l) = f (v:o) l
+  f o []      = o
+  f o (v : l) = f (v : o) l
 
-testReverseAList = [5, 4, 3, 2, 1] @=? rev [1, 2, 3, 4, 5]
+testReverseAList :: SpecWith ()
+testReverseAList =
+  it "ReverseAList" $ rev [1, 2, 3, 4, 5] `shouldBe` [5, 4, 3, 2, 1]

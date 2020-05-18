@@ -60,8 +60,8 @@ testException2 = do
 
 testException3 = do
 
-  _ <- onException (doSomething 1) after
   -- _ <- onException (error "onException") after
+  _ <- onException (doSomething 1) after
   bracket_ before after (void $ doSomething $ error "bracket_")
 
  where

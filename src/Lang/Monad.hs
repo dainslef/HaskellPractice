@@ -21,11 +21,11 @@ newtype App a = App {
 } deriving (Eq, Show)
 
 instance Functor App where
-  fmap  = (App.) . (.app)
+  fmap = (App .) . (. app)
 
 instance Applicative App where
-  pure = App
-  (<*>) = flip (flip (App.) . app) . app
+  pure  = App
+  (<*>) = flip (flip (App .) . app) . app
 
 testMonad :: IO ()
 testMonad = print app1 >> print app2 >> print mon1 where

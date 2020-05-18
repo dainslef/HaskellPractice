@@ -1,8 +1,8 @@
 module Lang.Async where
 
-import Control.Concurrent
-import Control.Concurrent.Async
-import Control.Monad (mapM)
+import           Control.Concurrent
+import           Control.Concurrent.Async
+import           Control.Monad                  ( mapM )
 
 actionN :: Int -> IO String
 actionN num = do
@@ -12,12 +12,15 @@ actionN num = do
   return $ "Action " ++ n
 
 actions, actionsL, actionsM :: [IO a] -> IO [Async a]
-actions = foldr (\a b -> do
-  l <- b
-  c <- async a
-  return $ c : l) $ return []
-actionsL = foldr (\a b ->
-  async a >>= \c -> (c:) <$> b) $ return []
+actions =
+  foldr
+      (\a b -> do
+        l <- b
+        c <- async a
+        return $ c : l
+      )
+    $ return []
+actionsL = foldr (\a b -> async a >>= \c -> (c :) <$> b) $ return []
 actionsM = mapM async
 
 testAsync1 = do
