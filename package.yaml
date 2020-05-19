@@ -25,11 +25,21 @@ build-type: Simple
 
 library:
   source-dirs: src
-  dependencies: [base, stm, async, http-conduit, http-client, HUnit]
+  dependencies: [base, stm, async, http-conduit, http-client, hspec]
 
 tests:
-  main-test:
+  code-wars:
     source-dirs: test
-    main: Test.hs
-    dependencies: [base, hspec, stm, async, http-conduit, http-client, haskell-practice]
+    main: CodeWars.hs
+    dependencies: [base, hspec, haskell-practice]
+    other-modules: []
+  lang-feature:
+    source-dirs: test
+    main: LangFeature.hs
+    dependencies: [base, hspec, haskell-practice]
+    other-modules: []
+  hacker-rank:
+    source-dirs: test
+    main:  HackerRank.hs
+    dependencies: [base, hspec, haskell-practice]
     other-modules: []

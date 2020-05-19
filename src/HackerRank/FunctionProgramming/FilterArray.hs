@@ -15,6 +15,6 @@ f1 = k [] where
   k o n (v : l) | v < n     = k (o ++ [v]) n l
                 | otherwise = k o n l
 
-testFilterArray :: SpecWith ()
+testFilterArray :: Spec
 testFilterArray =
   it "FilterArray" $ f 3 [1, 2, 3, 4, 5, 6, 7, 8, 9] `shouldBe` [1, 2]

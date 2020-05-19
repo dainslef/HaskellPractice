@@ -1,0 +1,10 @@
+cradle:
+  stack:
+    - path: ./test
+      component: "haskell-practice:test:code-wars"
+    - path: ./test
+      component: "haskell-practice:test:hacker-rank"
+    - path: ./test
+      component: "haskell-practice:test:lang-feature"
+    - path: ./src
+      component: "haskell-practice:lib"

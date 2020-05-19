@@ -9,7 +9,8 @@ f = k 0 where
               | otherwise    = next
     where next = k (n + 1) l
 
-testFilterPositonInAList =
+testFilterPositionInAList :: Spec
+testFilterPositionInAList =
   it "FilterPositionsInAList"
     $          f [1, 2, 3, 4, 5, 6, 7, 8, 9]
     `shouldBe` [2, 4, 6, 8]
