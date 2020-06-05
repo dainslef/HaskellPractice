@@ -98,7 +98,7 @@ decodeDebug items rowSize = results where
   groupCount = itemSize `div` unit -- get the count of group
   rem        = itemSize `mod` unit -- get the index offset in group
   range =
-    traceIt
+    traceSelf
         (  "unit: "
         ++ show unit
         ++ ", itemSize: "
@@ -125,22 +125,22 @@ decodeDebug items rowSize = results where
       = [row]
       | let (_, lastSize) = last lastItems
       = lastItems ++ [(rowIndex, lastSize + size)]
-  rowToChars = traceIt "rowToChars: " $ build
-    (traceIt "indexToChars: " $ zip [1 ..] items)
-    (traceIt "rowToSize: " rowToSize)
+  rowToChars = traceSelf "rowToChars: " $ build
+    (traceSelf "indexToChars: " $ zip [1 ..] items)
+    (traceSelf "rowToSize: " rowToSize)
     []
    where
     build ((i, item) : otherItems) ranges@((row, size) : otherRanges) result
       | i < size  = build otherItems ranges result ++ [(row, item)]
       | otherwise = build otherItems otherRanges result ++ [(row, item)]
     build _ _ result = result
-  rowMapChars = traceIt "rowMapChars: " $ foldl op Map.empty rowToChars
+  rowMapChars = traceSelf "rowMapChars: " $ foldl op Map.empty rowToChars
     where op maps (k, v) = Map.insertWith (++) k [v] maps
   results = deal rowMapChars 1 (+ 1)   where
     deal :: Show a => Map.Map Int [a] -> Int -> (Int -> Int) -> [a]
     deal maps index indexOp =
       case
-          traceIt ("Map K: " ++ show index ++ " Value: ") $ maps Map.!? index
+          traceSelf ("Map K: " ++ show index ++ " Value: ") $ maps Map.!? index
         of
           Just (n : others) -> n : deal (mapOp others) nextIndex nextOp
           Nothing           -> []
