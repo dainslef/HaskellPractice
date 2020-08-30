@@ -1,15 +1,16 @@
-{-# LANGUAGE FlexibleInstances #-} -- make type class allow the nested types that don't in turn contain type variables
+-- make type class allow the nested types that don't in turn contain type variables
+{-# LANGUAGE FlexibleInstances #-}
 -- {-# LANGUAGE MultiParamTypeClasses #-} -- make type class allow multi type parameters, it has aready imported by extension `FunctionalDependencies`
-{-# LANGUAGE FunctionalDependencies #-} -- make type class support functional dependencies
+-- make type class support functional dependencies
+{-# LANGUAGE FunctionalDependencies #-}
 
 module Lang.TypeClass where
 
-import           Text.Read                      ( read )
+import Text.Read (read)
 
 newtype TypeA = TypeA Int
+
 newtype TypeB = TypeB String
-
-
 
 class TypeDependency a b c where
   get :: a -> b -> c
@@ -25,8 +26,6 @@ testTypeClass1 = do
   print (get (TypeA 666) (TypeB "2333") :: String)
   print (get (TypeA 666) (TypeA 777) :: String)
 
-
-
 class TypeClass a b where
   doSomething :: a -> b -> IO ()
 
@@ -39,9 +38,7 @@ instance TypeClass TypeA TypeA where
 
 testTypeClass2 = do
   doSomething (TypeA 2333) (TypeB "2333")
-  doSomething (TypeA 666)  (TypeA 23333)
-
-
+  doSomething (TypeA 666) (TypeA 23333)
 
 class MultiParamTypeClasses a b | a -> b where
   m :: a -> a -> b
@@ -50,18 +47,18 @@ class MultiParamTypeClasses a b | a -> b where
 -- one dependency can only be allowed to have on `instance`
 instance MultiParamTypeClasses String Int where
   m = flip ((+) . read) . read
+
 -- error: ""
 -- instance MultiParamTypeClasses String String where m = (++)
 
 testFunctionalDependencies1 = print $ m "123" "456"
-
-
 
 class FunctionalDependencies argA argB argC | argB -> argC where
   f :: argA -> argB -> argC
 
 instance FunctionalDependencies String String String where
   f = (++)
+
 instance FunctionalDependencies Int String String where
   f = (++) . show
 

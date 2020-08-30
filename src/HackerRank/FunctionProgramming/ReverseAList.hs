@@ -1,11 +1,12 @@
 module HackerRank.FunctionProgramming.ReverseAList where
 
-import           Test.Hspec
+import Test.Hspec
 
 rev :: [Int] -> [Int]
-rev = f [] where
-  f o []      = o
-  f o (v : l) = f (v : o) l
+rev = f []
+  where
+    f o [] = o
+    f o (v : l) = f (v : o) l
 
 testReverseAList :: Spec
 testReverseAList =

@@ -1,19 +1,23 @@
 module HackerRank.FunctionProgramming.FilterArray where
 
-import           Test.Hspec
+import Test.Hspec
 
 f :: Int -> [Int] -> [Int]
 f _ [] = []
-f n (v : l) | v < n     = v : next
-            | otherwise = next
-  where next = f1 n l
+f n (v : l)
+  | v < n = v : next
+  | otherwise = next
+  where
+    next = f1 n l
 
 -- use tail recursion
 f1 :: Int -> [Int] -> [Int]
-f1 = k [] where
-  k o _ [] = o
-  k o n (v : l) | v < n     = k (o ++ [v]) n l
-                | otherwise = k o n l
+f1 = k []
+  where
+    k o _ [] = o
+    k o n (v : l)
+      | v < n = k (o ++ [v]) n l
+      | otherwise = k o n l
 
 testFilterArray :: Spec
 testFilterArray =

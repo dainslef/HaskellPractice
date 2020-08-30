@@ -10,7 +10,7 @@ testFixityDeclaration = do
   (return 1 @@@ return 2) @@@ return 3 -- non-associative
   return ()
 
-(...), (|||) :: IO Int -> IO Int -> IO Int
+(...), (|||), (@@@) :: IO Int -> IO Int -> IO Int
 n1 ... n2 = do
   v1 <- n1
   v2 <- n2
@@ -21,5 +21,7 @@ n1 ... n2 = do
 
 -- fixity declarations
 infixl 5 ...
+
 infixr 6 |||
+
 infix 7 @@@

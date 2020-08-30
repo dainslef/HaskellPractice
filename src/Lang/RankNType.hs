@@ -1,9 +1,10 @@
-{-# LANGUAGE RankNTypes, FlexibleInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RankNTypes #-}
 
 module Lang.RankNType where
 
-rankNTypes
-  :: (Show a, Show b) => (forall a . Show a => a -> String) -> a -> b -> IO ()
+rankNTypes ::
+  (Show a, Show b) => (forall a. Show a => a -> String) -> a -> b -> IO ()
 rankNTypes f a b = do
   let (fa, fb) = (f a, f b)
   print $ "a: " ++ fa ++ " b: " ++ fb

@@ -11,14 +11,15 @@
 
 module CodeWars.Kata.SplitStrings where
 
-import           Test.Hspec
+import Test.Hspec
 
 splitStrings :: String -> [String]
-splitStrings = f [] where
-  f :: [String] -> String -> [String]
-  f out (c1 : c2 : others) = f (out ++ [c1 : [c2]]) others
-  f out [c               ] = out ++ [c : ['_']]
-  f out []                 = out
+splitStrings = f []
+  where
+    f :: [String] -> String -> [String]
+    f out (c1 : c2 : others) = f (out ++ [c1 : [c2]]) others
+    f out [c] = out ++ [c : ['_']]
+    f out [] = out
 
 testSplitStrings :: Spec
 testSplitStrings = it "SplitStrings" $ do

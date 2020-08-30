@@ -1,6 +1,6 @@
 module Lang.Pointfree where
 
-import           Data.Foldable                  ( foldl' )
+import Data.Foldable (foldl')
 
 -- 進行pointfree變換時的簡單規律：
 -- 1. 表達式從左向右結合，函數簽名最後的類型變形需要在表達式最左端進行
@@ -18,12 +18,12 @@ owl = (.) (.)
 dot :: (b -> c) -> (a -> a1 -> b) -> a -> a1 -> c
 dot = (.) . (.)
 
-squish
-  :: (b1 -> a1)
-  -> (a1 -> b1 -> c)
-  -> (b2 -> b1)
-  -> (a2 -> a3 -> b2)
-  -> (a3 -> a2)
-  -> a3
-  -> c
+squish ::
+  (b1 -> a1) ->
+  (a1 -> b1 -> c) ->
+  (b2 -> b1) ->
+  (a2 -> a3 -> b2) ->
+  (a3 -> a2) ->
+  a3 ->
+  c
 squish f a b c g = (f >>= a) . b . (c =<< g)

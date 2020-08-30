@@ -10,7 +10,7 @@ testLazy1 = do
 
 testLazy2 =
   let f = (1 +) $! error "Error Arg!"
-  in  print "Before..." >> let s = f - 1 in print "After..."
+   in print "Before..." >> let s = f - 1 in print "After..."
 
 doSomething :: Int -> IO ()
 doSomething !n = do
@@ -38,19 +38,19 @@ testLazy4 = do
 testLazy5 = let !(a, !b) = (1, undefined) in print "Lazy"
 
 myFoldl :: (b -> a -> b) -> b -> [a] -> b
-myFoldl f z []      = z
+myFoldl f z [] = z
 myFoldl f z (n : l) = myFoldl f (f z n) l
 
 myFoldl' :: (b -> a -> b) -> b -> [a] -> b
-myFoldl' f z []      = z
+myFoldl' f z [] = z
 myFoldl' f z (n : l) = myFoldl' f (flip f n $! z) l
 
 myFoldl'' :: (b -> a -> b) -> b -> [a] -> b
-myFoldl'' f z  []      = z
+myFoldl'' f z [] = z
 myFoldl'' f !z (n : l) = myFoldl'' f (f z n) l
 
 myFoldr :: (a -> b -> b) -> b -> [a] -> b
-myFoldr f z  []      = z
+myFoldr f z [] = z
 myFoldr f !z (n : l) = f n $ myFoldr f z l
 
 testFold = print $ myFoldr (-) 0 [1 .. 50000000]

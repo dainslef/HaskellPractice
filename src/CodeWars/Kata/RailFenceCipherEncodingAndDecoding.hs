@@ -21,137 +21,159 @@
 -- Note that the example above excludes the punctuation and spaces just for simplicity. There are, however, tests that include punctuation. Don't filter out punctuation as they are a part of the string.
 
 module CodeWars.Kata.RailFenceCipherEncodingAndDecoding
-  ( testRailFenceCipherEncodingAndDecoding
+  ( testRailFenceCipherEncodingAndDecoding,
   )
 where
 
-import           Test.Hspec
-import           Data.Foldable                  ( fold )
-import           Control.Monad                  ( forM_ )
-import qualified Data.Map.Lazy                 as Map
-
-import           Lang.Utils
+import Control.Monad (forM_)
+import Data.Foldable (fold)
+import qualified Data.Map.Lazy as Map
+import Lang.Utils
+import Test.Hspec
 
 encode :: [a] -> Int -> [a]
 encode items size =
   -- check if the size is valid
-  let op i v | size > 1  = (row, [v])
-             | otherwise = (1, [v])
-         where
+  let op i v
+        | size > 1 = (row, [v])
+        | otherwise = (1, [v])
+        where
           unit = 2 * size - 2 -- the size of group data
-          rem  = i `mod` unit -- get the index offset in group
+          rem = i `mod` unit -- get the index offset in group
           -- compute the row index in "v"
-          row | rem == 0   = 2
-              | rem < size = rem
-              | otherwise  = 2 * size - rem
-  in  fold $ Map.elems $ Map.fromListWith (flip (++)) $ zipWith op [1 ..] items
+          row
+            | rem == 0 = 2
+            | rem < size = rem
+            | otherwise = 2 * size - rem
+   in fold $ Map.elems $ Map.fromListWith (flip (++)) $ zipWith op [1 ..] items
 
 decode :: [a] -> Int -> [a]
-decode items 1       = items
+decode items 1 = items
 decode items rowSize = results
- where
-  unit       = 2 * rowSize - 2 -- the size of group data
-  itemSize   = length items
-  groupCount = itemSize `div` unit -- get the count of group
-  rem        = itemSize `mod` unit -- get the index offset in group
-  range      = map op [1 .. rowSize]   where
-    op row = (row, f row)
-    f row
-      | -- first and last row
-        row == 1 || row == rowSize = groupCount + if rem >= row then 1 else 0
-      | -- some row which have two elements
-        row >= 2 * rowSize - rem   = groupCount * 2 + 2
-      | rem >= row                 = groupCount * 2 + 1
-      | otherwise                  = groupCount * 2
-  rowToSize = foldl op [] range   where
-    op lastItems row@(rowIndex, size)
-      | null lastItems
-      = [row]
-      | let (_, lastSize) = last lastItems
-      = lastItems ++ [(rowIndex, lastSize + size)]
-  rowToChars = build (zip [1 ..] items) rowToSize   where
-    build ((i, item) : otherItems) allRanges@((row, size) : otherRanges) =
-      build otherItems ranges ++ [(row, item)]     where
-      ranges | i < size  = allRanges
-             | otherwise = otherRanges
-    build _ _ = []
-  rowMapChars = foldl op Map.empty rowToChars
-    where op maps (k, v) = Map.insertWith (++) k [v] maps
-  results = deal rowMapChars 1 (+ 1)   where
-    deal maps index indexOp = case maps Map.!? index of
-      Just (n : others) -> n : deal (mapOp others) nextIndex nextOp
-      Nothing           -> []
-     where
-      nextIndex = nextOp index
-      nextOp | index == 1       = (+ 1)
-             | index == rowSize = flip (-) 1
-             | otherwise        = indexOp
-      mapOp others = Map.update (const item) index maps       where
-        item | null others = Nothing
-             | otherwise   = Just others
+  where
+    unit = 2 * rowSize - 2 -- the size of group data
+    itemSize = length items
+    groupCount = itemSize `div` unit -- get the count of group
+    rem = itemSize `mod` unit -- get the index offset in group
+    range = map op [1 .. rowSize]
+      where
+        op row = (row, f row)
+        f row
+          | -- first and last row
+            row == 1 || row == rowSize =
+            groupCount + if rem >= row then 1 else 0
+          | -- some row which have two elements
+            row >= 2 * rowSize - rem =
+            groupCount * 2 + 2
+          | rem >= row = groupCount * 2 + 1
+          | otherwise = groupCount * 2
+    rowToSize = foldl op [] range
+      where
+        op lastItems row@(rowIndex, size)
+          | null lastItems =
+            [row]
+          | let (_, lastSize) = last lastItems =
+            lastItems ++ [(rowIndex, lastSize + size)]
+    rowToChars = build (zip [1 ..] items) rowToSize
+      where
+        build ((i, item) : otherItems) allRanges@((row, size) : otherRanges) =
+          build otherItems ranges ++ [(row, item)]
+          where
+            ranges
+              | i < size = allRanges
+              | otherwise = otherRanges
+        build _ _ = []
+    rowMapChars = foldl op Map.empty rowToChars
+      where
+        op maps (k, v) = Map.insertWith (++) k [v] maps
+    results = deal rowMapChars 1 (+ 1)
+      where
+        deal maps index indexOp = case maps Map.!? index of
+          Just (n : others) -> n : deal (mapOp others) nextIndex nextOp
+          Nothing -> []
+          where
+            nextIndex = nextOp index
+            nextOp
+              | index == 1 = (+ 1)
+              | index == rowSize = flip (-) 1
+              | otherwise = indexOp
+            mapOp others = Map.update (const item) index maps
+              where
+                item
+                  | null others = Nothing
+                  | otherwise = Just others
 
 decodeDebug :: Show a => [a] -> Int -> [a]
-decodeDebug items 1       = items
-decodeDebug items rowSize = results where
-  unit       = 2 * rowSize - 2 -- the size of group data
-  itemSize   = length items
-  groupCount = itemSize `div` unit -- get the count of group
-  rem        = itemSize `mod` unit -- get the index offset in group
-  range =
-    traceSelf
-        (  "unit: "
-        ++ show unit
-        ++ ", itemSize: "
-        ++ show itemSize
-        ++ ", groupCount: "
-        ++ show groupCount
-        ++ ", rem: "
-        ++ show rem
-        ++ ", rowSize: "
-        ++ show rowSize
-        ++ ", range: "
+decodeDebug items 1 = items
+decodeDebug items rowSize = results
+  where
+    unit = 2 * rowSize - 2 -- the size of group data
+    itemSize = length items
+    groupCount = itemSize `div` unit -- get the count of group
+    rem = itemSize `mod` unit -- get the index offset in group
+    range =
+      traceSelf
+        ( "unit: "
+            ++ show unit
+            ++ ", itemSize: "
+            ++ show itemSize
+            ++ ", groupCount: "
+            ++ show groupCount
+            ++ ", rem: "
+            ++ show rem
+            ++ ", rowSize: "
+            ++ show rowSize
+            ++ ", range: "
         )
-      $ map op [1 .. rowSize]   where
-    op row = (row, f row)
-    f row
-      | -- first row and last row
-        row == 1 || row == rowSize = groupCount + if rem >= row then 1 else 0
-      | row >= 2 * rowSize - rem   = groupCount * 2 + 2
-      | rem >= row                 = groupCount * 2 + 1
-      | otherwise                  = groupCount * 2
-  rowToSize = foldl op [] range   where
-    op lastItems row@(rowIndex, size)
-      | null lastItems
-      = [row]
-      | let (_, lastSize) = last lastItems
-      = lastItems ++ [(rowIndex, lastSize + size)]
-  rowToChars = traceSelf "rowToChars: " $ build
-    (traceSelf "indexToChars: " $ zip [1 ..] items)
-    (traceSelf "rowToSize: " rowToSize)
-    []
-   where
-    build ((i, item) : otherItems) ranges@((row, size) : otherRanges) result
-      | i < size  = build otherItems ranges result ++ [(row, item)]
-      | otherwise = build otherItems otherRanges result ++ [(row, item)]
-    build _ _ result = result
-  rowMapChars = traceSelf "rowMapChars: " $ foldl op Map.empty rowToChars
-    where op maps (k, v) = Map.insertWith (++) k [v] maps
-  results = deal rowMapChars 1 (+ 1)   where
-    deal :: Show a => Map.Map Int [a] -> Int -> (Int -> Int) -> [a]
-    deal maps index indexOp =
-      case
-          traceSelf ("Map K: " ++ show index ++ " Value: ") $ maps Map.!? index
-        of
-          Just (n : others) -> n : deal (mapOp others) nextIndex nextOp
-          Nothing           -> []
-     where
-      nextIndex = nextOp index
-      nextOp | index == 1       = (+ 1)
-             | index == rowSize = flip (-) 1
-             | otherwise        = indexOp
-      mapOp others = Map.update (const item) index maps       where
-        item | null others = Nothing
-             | otherwise   = Just others
+        $ map op [1 .. rowSize]
+      where
+        op row = (row, f row)
+        f row
+          | -- first row and last row
+            row == 1 || row == rowSize =
+            groupCount + if rem >= row then 1 else 0
+          | row >= 2 * rowSize - rem = groupCount * 2 + 2
+          | rem >= row = groupCount * 2 + 1
+          | otherwise = groupCount * 2
+    rowToSize = foldl op [] range
+      where
+        op lastItems row@(rowIndex, size)
+          | null lastItems =
+            [row]
+          | let (_, lastSize) = last lastItems =
+            lastItems ++ [(rowIndex, lastSize + size)]
+    rowToChars =
+      traceSelf "rowToChars: " $
+        build
+          (traceSelf "indexToChars: " $ zip [1 ..] items)
+          (traceSelf "rowToSize: " rowToSize)
+          []
+      where
+        build ((i, item) : otherItems) ranges@((row, size) : otherRanges) result
+          | i < size = build otherItems ranges result ++ [(row, item)]
+          | otherwise = build otherItems otherRanges result ++ [(row, item)]
+        build _ _ result = result
+    rowMapChars = traceSelf "rowMapChars: " $ foldl op Map.empty rowToChars
+      where
+        op maps (k, v) = Map.insertWith (++) k [v] maps
+    results = deal rowMapChars 1 (+ 1)
+      where
+        deal :: Show a => Map.Map Int [a] -> Int -> (Int -> Int) -> [a]
+        deal maps index indexOp =
+          case traceSelf ("Map K: " ++ show index ++ " Value: ") $ maps Map.!? index of
+            Just (n : others) -> n : deal (mapOp others) nextIndex nextOp
+            Nothing -> []
+          where
+            nextIndex = nextOp index
+            nextOp
+              | index == 1 = (+ 1)
+              | index == rowSize = flip (-) 1
+              | otherwise = indexOp
+            mapOp others = Map.update (const item) index maps
+              where
+                item
+                  | null others = Nothing
+                  | otherwise = Just others
 
 testRailFenceCipherEncodingAndDecoding :: Spec
 testRailFenceCipherEncodingAndDecoding =
@@ -167,11 +189,11 @@ testRailFenceCipherEncodingAndDecoding =
     "Hello, World!" `encode` 3 `decode` 3 `shouldBe` "Hello, World!"
     forM_
       [1 .. 100]
-      (\i ->
-        trace ("test with row: " ++ show i)
-          $          "123456789"
-          `encode`   i
-          -- `decodeDebug` i
-          `decode`   i
-          `shouldBe` "123456789"
+      ( \i ->
+          trace ("test with row: " ++ show i) $
+            "123456789"
+              `encode` i
+              -- `decodeDebug` i
+              `decode` i
+              `shouldBe` "123456789"
       )
