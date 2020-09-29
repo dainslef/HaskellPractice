@@ -8,6 +8,5 @@ rev = f []
     f o [] = o
     f o (v : l) = f (v : o) l
 
-testReverseAList :: Spec
-testReverseAList =
-  it "ReverseAList" $ rev [1, 2, 3, 4, 5] `shouldBe` [5, 4, 3, 2, 1]
+test :: Spec
+test = it "ReverseAList" $ rev [1, 2, 3, 4, 5] `shouldBe` [5, 4, 3, 2, 1]

@@ -12,8 +12,5 @@ f = k 0
       where
         next = k (n + 1) l
 
-testFilterPositionInAList :: Spec
-testFilterPositionInAList =
-  it "FilterPositionsInAList" $
-    f [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      `shouldBe` [2, 4, 6, 8]
+test :: Spec
+test = it "FilterPositionsInAList" $ f [1, 2, 3, 4, 5, 6, 7, 8, 9] `shouldBe` [2, 4, 6, 8]
