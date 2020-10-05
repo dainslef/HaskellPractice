@@ -35,6 +35,7 @@ main = hspec $ do
     it "TypeClass" $ do
       testTypeClass1
       testTypeClass2
+    it "TypeClassOverload" testTypeClassWithDynamicArgs
     it "FunctionalDependencies" $ do
       testFunctionalDependencies1
       testFunctionalDependencies2

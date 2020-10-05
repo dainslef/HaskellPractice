@@ -27,18 +27,37 @@ testTypeClass1 = do
   print (get (TypeA 666) (TypeA 777) :: String)
 
 class TypeClass a b where
-  doSomething :: a -> b -> IO ()
+  overload :: a -> b -> IO ()
 
 instance TypeClass TypeA TypeB where
-  doSomething (TypeA t) _ = print $ "Type Class AB: " ++ show t
+  overload (TypeA t) _ = print $ "Type Class AB: " ++ show t
 
 -- use extension `FlexibleInstances` to allow nested types that don't in turn contain type variables
+-- overload method with different type of parameter in argument list (ad hoc polymorphism)
 instance TypeClass TypeA TypeA where
-  doSomething (TypeA t) _ = print $ "Type Class AA: " ++ show t
+  overload (TypeA t) _ = print $ "Type Class AA: " ++ show t
 
 testTypeClass2 = do
-  doSomething (TypeA 2333) (TypeB "2333")
-  doSomething (TypeA 666) (TypeA 23333)
+  overload (TypeA 2333) (TypeB "2333")
+  overload (TypeA 666) (TypeA 23333)
+
+class TypeClassWithDynamicArgs a where
+  dynamicArgs :: a
+
+instance TypeClassWithDynamicArgs (TypeA -> IO ()) where
+  dynamicArgs = \(TypeA a) -> print $ "Type Class A: " ++ show a
+
+instance TypeClassWithDynamicArgs (TypeB -> IO ()) where
+  dynamicArgs = \(TypeB b) -> print $ "Type Class B: " ++ b
+
+instance TypeClassWithDynamicArgs (TypeA -> TypeB -> IO ()) where
+  dynamicArgs = \(TypeA a) (TypeB b) -> print $ "Type Class A: " ++ show a ++ ", Class B: " ++ b
+
+-- overload method with different number of parameter in argument list (parametric polymorphism)
+testTypeClassWithDynamicArgs = do
+  dynamicArgs (TypeA 666) :: IO ()
+  dynamicArgs (TypeB "2333") :: IO ()
+  dynamicArgs (TypeA 666) (TypeB "2333") :: IO ()
 
 class MultiParamTypeClasses a b | a -> b where
   m :: a -> a -> b
