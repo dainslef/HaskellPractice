@@ -33,15 +33,13 @@ import Test.Hspec
 
 encode :: [a] -> Int -> [a]
 encode items size =
-  -- check if the size is valid
-  let op i v
+  let op i v -- check if the size is valid
         | size > 1 = (row, [v])
         | otherwise = (1, [v])
         where
           unit = 2 * size - 2 -- the size of group data
           rem = i `mod` unit -- get the index offset in group
-          -- compute the row index in "v"
-          row
+          row -- compute the row index in "v"
             | rem == 0 = 2
             | rem < size = rem
             | otherwise = 2 * size - rem
@@ -59,19 +57,15 @@ decode items rowSize = results
       where
         op row = (row, f row)
         f row
-          | -- first and last row
-            row == 1 || row == rowSize =
-            groupCount + if rem >= row then 1 else 0
-          | -- some row which have two elements
-            row >= 2 * rowSize - rem =
-            groupCount * 2 + 2
+          | row == 1 || row == rowSize =
+            groupCount + if rem >= row then 1 else 0 -- first and last row
+          | row >= 2 * rowSize - rem = groupCount * 2 + 2 -- some row which have two elements
           | rem >= row = groupCount * 2 + 1
           | otherwise = groupCount * 2
     rowToSize = foldl op [] range
       where
         op lastItems row@(rowIndex, size)
-          | null lastItems =
-            [row]
+          | null lastItems = [row]
           | let (_, lastSize) = last lastItems =
             lastItems ++ [(rowIndex, lastSize + size)]
     rowToChars = build (zip [1 ..] items) rowToSize
@@ -83,9 +77,7 @@ decode items rowSize = results
               | i < size = allRanges
               | otherwise = otherRanges
         build _ _ = []
-    rowMapChars = foldl op Map.empty rowToChars
-      where
-        op maps (k, v) = Map.insertWith (++) k [v] maps
+    rowMapChars = foldl op Map.empty rowToChars where op maps (k, v) = Map.insertWith (++) k [v] maps
     results = deal rowMapChars 1 (+ 1)
       where
         deal maps index indexOp = case maps Map.!? index of
@@ -129,17 +121,15 @@ decodeDebug items rowSize = results
       where
         op row = (row, f row)
         f row
-          | -- first row and last row
-            row == 1 || row == rowSize =
-            groupCount + if rem >= row then 1 else 0
+          | row == 1 || row == rowSize =
+            groupCount + if rem >= row then 1 else 0 -- first row and last row
           | row >= 2 * rowSize - rem = groupCount * 2 + 2
           | rem >= row = groupCount * 2 + 1
           | otherwise = groupCount * 2
     rowToSize = foldl op [] range
       where
         op lastItems row@(rowIndex, size)
-          | null lastItems =
-            [row]
+          | null lastItems = [row]
           | let (_, lastSize) = last lastItems =
             lastItems ++ [(rowIndex, lastSize + size)]
     rowToChars =

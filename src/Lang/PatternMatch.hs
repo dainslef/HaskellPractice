@@ -15,9 +15,8 @@ printNumber num@(Number n)
 printNumber _ = print "No match"
 
 add :: Int -> Int -> Int
-add n | n > 100 = (+ n)
-
 -- add n1 n2 = n1 + n2 -- every expression in partten match should have same size of arguments
+add n | n > 100 = (+ n)
 
 testPatternMatch = do
   printNumber $ Number 2333
